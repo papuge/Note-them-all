@@ -1,9 +1,8 @@
-package com.example.noteemall
+package com.example.noteemall.data
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
 
 @Dao
 interface NoteTagDao {

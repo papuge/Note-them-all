@@ -1,7 +1,8 @@
-package com.example.noteemall
+package com.example.noteemall.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.noteemall.R
 
 class MainActivity : AppCompatActivity() {
 

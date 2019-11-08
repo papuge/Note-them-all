@@ -1,10 +1,10 @@
-package com.example.noteemall
+package com.example.noteemall.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
-interface NoteInfoDataDao {
+interface NoteDataDao {
     @Insert
     fun insertNote(note: Note): Long
 
@@ -33,10 +33,10 @@ interface NoteInfoDataDao {
     fun getAllNotesByDate(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notes WHERE note_id == :noteId LIMIT 1")
-    fun getNoteById(noteId: Long)
+    fun getNoteById(noteId: Long): Note
 
     @Query("SELECT * FROM tags WHERE tag_id == :tagId LIMIT 1")
-    fun getTagById(tagId: Long)
+    fun getTagById(tagId: Long): Tag
 
     @Query("SELECT * FROM tags")
     fun getAllTags(): List<Tag>

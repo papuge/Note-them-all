@@ -1,4 +1,4 @@
-package com.example.noteemall
+package com.example.noteemall.data
 
 import androidx.room.Embedded
 import androidx.room.Junction
