@@ -6,25 +6,22 @@ import androidx.room.*
 @Dao
 interface NoteDataDao {
     @Insert
-    fun insertNote(note: Note): Long
-
-    @Insert
-    fun insertNotes(vararg notes: Note): List<Long>
+    suspend fun insertNote(note: Note): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertTag(tag: Tag): Long
+    suspend fun insertTag(tag: Tag): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertTags(vararg tags: Tag): List<Long>
+    suspend fun insertTags(vararg tags: Tag): List<Long>
 
     @Update
-    fun updateNote(note: Note)
+    suspend fun updateNote(note: Note)
 
     @Delete
-    fun deleteNote(note: Note)
+    suspend fun deleteNote(note: Note)
 
     @Delete
-    fun deleteTag(tag: Tag)
+    suspend fun deleteTag(tag: Tag)
 
     @Query("SELECT * FROM notes ORDER BY title ASC")
     fun getAllNotesByTitle(): LiveData<List<Note>>

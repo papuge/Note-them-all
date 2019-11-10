@@ -1,5 +1,6 @@
 package com.example.noteemall.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,15 +9,15 @@ import androidx.room.Query
 interface NoteTagDao {
 
     @Insert
-    fun insertNoteTagJoin(personCarJoin: NoteTagJoin): Long
+    suspend fun insertNoteTagJoin(noteTagJoin: NoteTagJoin): Long
 
     @Query("SELECT * FROM notes")
-    fun getAllNotesWithTags(): List<NoteWithTagsPojo>
+    fun getAllNotesWithTags(): LiveData<List<NoteWithTagsPojo>>
 
     @Query("SELECT * FROM notes WHERE note_id == :noteId")
-    fun getNoteWithTags(noteId: Long): List<NoteWithTagsPojo>
+    fun getNoteWithTags(noteId: Long): LiveData<List<NoteWithTagsPojo>>
 
     @Query("SELECT * FROM tags WHERE tag_id == :tagId")
-    fun getTagWithNotes(tagId: Long): List<NoteWithTagsPojo>
+    fun getTagWithNotes(tagId: Long): LiveData<List<TagWithNotesPojo>>
 
 }

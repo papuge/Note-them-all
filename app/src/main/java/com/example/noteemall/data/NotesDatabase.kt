@@ -14,18 +14,23 @@ abstract class NotesDatabase: RoomDatabase() {
     abstract fun noteTagDao(): NoteTagDao
 
     companion object {
-        private var instance: NotesDatabase? = null
+        @Volatile
+        private var INSTANCE: NotesDatabase? = null
 
-        private val LOCK = Any()
-
-        operator fun invoke(context: Context)= instance
-            ?: synchronized(LOCK){
-            instance
-                ?: buildDatabase(context).also { instance = it}
+        fun getDatabase(context: Context): NotesDatabase {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
+            }
+            synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    NotesDatabase::class.java,
+                    "word_database"
+                ).build()
+                INSTANCE = instance
+                return instance
+            }
         }
-
-        private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
-            NotesDatabase::class.java, "notes.db")
-            .build()
     }
 }

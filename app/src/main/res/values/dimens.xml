@@ -2,4 +2,9 @@
 <resources>
     <dimen name="header_size">24sp</dimen>
     <dimen name="content_size">21sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="card_spacing_horizontal">15dp</dimen>
+    <dimen name="card_spacing_vertical">15dp</dimen>
+    <dimen name="card_text_margin">12dp</dimen>
+    <dimen name="card_radius">12dp</dimen>
 </resources>
