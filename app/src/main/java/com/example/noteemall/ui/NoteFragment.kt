@@ -40,6 +40,7 @@ class NoteFragment : Fragment() {
                 chip.text = this
                 chip.setChipBackgroundColorResource(R.color.colorCardBackground)
                 chip.isClickable = true
+                chip.textSize = resources.getDimension(R.dimen.tag_text_size)
                 tagsChipGroup.addView(chip)
             }
         }

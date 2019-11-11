@@ -24,7 +24,8 @@
             android:ellipsize="end"
             android:padding="15dp"
             android:text="Header"
-            android:textSize="26sp" />
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/note_header_text_size" />
 
     </HorizontalScrollView>
 
@@ -42,7 +43,7 @@
             android:id="@+id/tags_chip_group"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="15dp" />
+            android:padding="10dp" />
 
     </HorizontalScrollView>
 
@@ -54,7 +55,7 @@
         android:padding="15dp"
         android:scrollbars="vertical"
         android:text="Content"
-        android:textSize="16sp"
+        android:textSize="@dimen/note_content_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

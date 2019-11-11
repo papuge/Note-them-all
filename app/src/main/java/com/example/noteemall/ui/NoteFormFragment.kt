@@ -10,7 +10,7 @@ import android.view.ViewGroup
 
 import com.example.noteemall.R
 
-class EditNoteFragment : Fragment() {
+class NoteFormFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

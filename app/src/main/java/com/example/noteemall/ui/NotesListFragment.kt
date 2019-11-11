@@ -5,18 +5,24 @@ import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.*
+import androidx.transition.Visibility
 import com.example.noteemall.R
 import com.example.noteemall.adapters.NotesAdapter
 import com.example.noteemall.adapters.SwipeToDeleteCallback
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NotesListFragment : Fragment() {
 
     private lateinit var notesList: RecyclerView
     private lateinit var notesAdapter: NotesAdapter
-    private val notes: List<String> = listOf("note1LOOOOOOOOONGSOOOOOOOOOOLOOOOONG", "note2", "note3", "note4")
+    private val notes: List<String> = listOf("note1LOOOOOOOONG", "note2", "note3", "note4")
+    private lateinit var newButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +34,18 @@ class NotesListFragment : Fragment() {
         }
         notesList = view.findViewById(R.id.notes_list)
         notesList.adapter = notesAdapter
-        setUpRecyclerViewLayout()
+        if (notesAdapter.itemCount != 0) {
+            setUpRecyclerViewLayout()
+        } else {
+            view.findViewById<TextView>(R.id.empty_list_message)
+                .visibility = VISIBLE
+        }
+
+        newButton = view.findViewById(R.id.new_note_button)
+        newButton.setOnClickListener {
+            redirectToNewFragment()
+        }
+
         return view
     }
 
@@ -50,6 +67,16 @@ class NotesListFragment : Fragment() {
         val fragmentManager = activity?.supportFragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         val fragment = NoteFragment.newInstance(note)
+        fragmentTransaction
+            ?.addToBackStack(null)
+            ?.replace(R.id.fragment_container, fragment)
+            ?.commit()
+    }
+
+    private fun redirectToNewFragment() {
+        val fragmentManager = activity?.supportFragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        val fragment = NoteFormFragment()
         fragmentTransaction
             ?.addToBackStack(null)
             ?.replace(R.id.fragment_container, fragment)
