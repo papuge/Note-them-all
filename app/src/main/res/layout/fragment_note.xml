@@ -1,45 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.NoteFragment">
 
+    <HorizontalScrollView
+        android:id="@+id/note_header_scroll"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/tags_scroll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <TextView
+            android:id="@+id/note_header"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="15dp"
+            android:text="Header"
+            android:textSize="26sp" />
+
+    </HorizontalScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/tags_scroll"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/note_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_header_scroll">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tags_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="15dp" />
+
+    </HorizontalScrollView>
+
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/note_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="15dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/tags_chip_group"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/tags_chip_group"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="113dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="15dp"
-        android:text="TextView"
+        android:scrollbars="vertical"
+        android:text="Content"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tags_chip_group"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/tags_scroll" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_note_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintBottom_toBottomOf="@+id/note_content"
+        app:layout_constraintEnd_toEndOf="@+id/note_content"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_scroll"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_edit_white_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

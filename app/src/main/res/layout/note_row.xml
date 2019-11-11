@@ -7,45 +7,46 @@
     android:layout_height="120dp">
 
     <TextView
-        android:id="@+id/noteHeaderPreview"
+        android:id="@+id/note_header_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="1"
+        android:ellipsize="end"
         android:textSize="@dimen/header_size"
         android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.158"
         tools:text="@tools:sample/lorem" />
 
     <TextView
-        android:id="@+id/noteContentPreview"
+        android:id="@+id/note_сontent_preview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:lines="3"
         android:text="TextView"
         android:textSize="@dimen/content_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/noteHeaderPreview"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/note_header_preview"
         app:layout_constraintVertical_bias="0.122"
         tools:text="@tools:sample/lorem/random" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/guideline_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="25dp" />
+        app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="395dp" />
+        app:layout_constraintGuide_end="27dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

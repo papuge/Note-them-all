@@ -1,20 +1,15 @@
 package com.example.noteemall.adapters
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.TextureView
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteemall.R
-import com.example.noteemall.data.Note
 
 class NotesAdapter(
     val context: Context,
-    private var notes: List<String>
+    private var notes: List<String>,
+    private val clickListener: (position: Int) -> Unit
 ): RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
@@ -30,15 +25,25 @@ class NotesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflater.inflate(R.layout.note_row, parent, false))
+        return ViewHolder(inflater.inflate(R.layout.note_row, parent, false),
+            clickListener)
     }
 
     fun deleteItem(position: Int) {
+        // TODO(): Not implemented
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        private val header: TextView = itemView.findViewById(R.id.noteHeaderPreview)
-        private val content: TextView = itemView.findViewById(R.id.noteContentPreview)
+    class ViewHolder(itemView: View, listener: (position: Int) -> Unit):
+        RecyclerView.ViewHolder(itemView) {
+        private val header: TextView = itemView.findViewById(R.id.note_header_preview)
+        private val content: TextView = itemView.findViewById(R.id.note_сontent_preview)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                listener(position)
+            }
+        }
 
         fun bind(note: String) {
             header.text = note

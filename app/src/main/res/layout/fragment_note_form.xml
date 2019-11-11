@@ -10,47 +10,56 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/form_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"
         android:textSize="26sp"
+        android:textColor="@color/colorBlack"
         android:padding="15dp"/>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/form_title_edit_text"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:scrollHorizontally="true" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/form_tags_text_view"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:textSize="23dp"
+        android:layout_height="35dp"
+        android:textSize="23sp"
+        android:textColor="@color/colorBlack"
         android:layout_margin="15dp"
         android:text="Tags" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/form_tags_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:maxLines="2"
+        android:scrollHorizontally="true"/>
 
-    <EditText
-        android:id="@+id/editText3"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:ems="10"
-        android:hint="Note it all here..."
-        android:padding="15dp"
-        android:inputType="textPersonName" />
+        android:layout_height="450dp">
+
+        <EditText
+            android:id="@+id/form_content_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/note_it_all_here"
+            android:padding="15dp"
+            android:background="@android:color/transparent" />
+    </ScrollView>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/form_done_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add" />
+        android:text="Done" />
 </LinearLayout>

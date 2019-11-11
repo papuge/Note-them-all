@@ -10,10 +10,6 @@ class NotesRepository(
 
     suspend fun insertNote(note: Note) {
         val noteId = noteDataDao.insertNote(note)
-        for (tag in note.tags) {
-            val tagId = noteDataDao.insertTag(tag)
-            noteTagDao.insertNoteTagJoin(NoteTagJoin(noteId, tagId))
-        }
     }
 
     suspend fun updateNote(note: Note) {
