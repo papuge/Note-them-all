@@ -4,4 +4,7 @@
 
     <string name="note_it_all_here">Note it all here...</string>
     <string name="empty_notes_message">There\'s no notes yet</string>
+    <string name="done">Done</string>
+    <string name="tags">Tags</string>
+    <string name="title">Title</string>
 </resources>

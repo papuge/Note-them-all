@@ -5,16 +5,17 @@ import android.view.*
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteemall.R
+import com.example.noteemall.data.Note
 
 class NotesAdapter(
     val context: Context,
-    private var notes: List<String>,
     private val clickListener: (position: Int) -> Unit
 ): RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
+    private var notes = emptyList<Note>()
 
-    override fun getItemCount(): Int = notes?.size ?: 0
+    override fun getItemCount(): Int = notes.size
 
     private fun getNote(position: Int) =  notes?.get(position)
 
@@ -29,8 +30,13 @@ class NotesAdapter(
             clickListener)
     }
 
-    fun deleteItem(position: Int) {
+    internal fun deleteItem(position: Int) {
         // TODO(): Not implemented
+    }
+
+    internal fun setNotes(notes: List<Note>) {
+        this.notes = notes
+        notifyDataSetChanged()
     }
 
     class ViewHolder(itemView: View, listener: (position: Int) -> Unit):
@@ -45,9 +51,9 @@ class NotesAdapter(
             }
         }
 
-        fun bind(note: String) {
-            header.text = note
-            content.text = note
+        fun bind(note: Note) {
+            header.text = note.title
+            content.text = note.content
         }
 
     }

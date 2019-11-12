@@ -11,7 +11,7 @@ import com.example.noteemall.R
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import android.text.method.ScrollingMovementMethod
-
+import com.example.noteemall.data.Note
 
 
 class NoteFragment : Fragment() {
@@ -31,13 +31,13 @@ class NoteFragment : Fragment() {
         contentTextView = view.findViewById(R.id.note_content)
         contentTextView.movementMethod = ScrollingMovementMethod()
 
-        arguments?.getString(ARG_NOTE).run {
-            headerTextView.text = this
-            contentTextView.text = this
+        arguments?.getParcelable<Note>(ARG_NOTE).run {
+            headerTextView.text = this?.title ?: ""
+            contentTextView.text = this?.content ?: ""
 
-            for (i in 1..10) {
+            for (i in 1..5) {
                 val chip = Chip(requireContext())
-                chip.text = this
+                chip.text = this?.title ?: ""
                 chip.setChipBackgroundColorResource(R.color.colorCardBackground)
                 chip.isClickable = true
                 chip.textSize = resources.getDimension(R.dimen.tag_text_size)
@@ -51,10 +51,10 @@ class NoteFragment : Fragment() {
 
         private val ARG_NOTE: String = "ARG_VALS"
 
-        fun newInstance(note: String): NoteFragment {
+        fun newInstance(note: Note?): NoteFragment {
             val fragment = NoteFragment()
             val bundle = Bundle()
-            bundle.putString(ARG_NOTE, note)
+            bundle.putParcelable(ARG_NOTE, note)
             fragment.arguments = bundle
             return fragment
         }

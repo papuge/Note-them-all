@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "tags",
-    indices = [Index(value = ["tag"], unique = true)]
+    indices = [Index("tag_id")]
     )
 data class Tag (
     @PrimaryKey(autoGenerate = true)

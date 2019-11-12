@@ -20,14 +20,17 @@ interface NoteDataDao {
     @Delete
     suspend fun deleteNote(note: Note)
 
+    @Query("DELETE FROM notes")
+    suspend fun deleteAllNotes()
+
     @Delete
     suspend fun deleteTag(tag: Tag)
 
-    @Query("SELECT * FROM notes ORDER BY title ASC")
+    @Query("SELECT * FROM notes")
     fun getAllNotesByTitle(): LiveData<List<Note>>
 
-    @Query("SELECT * FROM notes ORDER BY date DESC")
-    fun getAllNotesByDate(): LiveData<List<Note>>
+//    @Query("SELECT * FROM notes ORDER BY date DESC")
+//    fun getAllNotesByDate(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notes WHERE note_id == :noteId LIMIT 1")
     fun getNoteById(noteId: Long): Note

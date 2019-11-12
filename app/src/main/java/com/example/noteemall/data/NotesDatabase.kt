@@ -1,35 +1,64 @@
 package com.example.noteemall.data
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Database(
     entities = [Note::class, Tag::class, NoteTagJoin::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class NotesDatabase: RoomDatabase() {
     abstract fun noteDataDao(): NoteDataDao
     abstract fun noteTagDao(): NoteTagDao
 
+    private class NotesDatabaseCallback(
+        private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+            INSTANCE?.let { database ->
+                scope.launch {
+                    populateDatabase(database.noteDataDao())
+                }
+            }
+        }
+
+        suspend fun populateDatabase(noteDataDao: NoteDataDao) {
+            noteDataDao.deleteAllNotes()
+
+            var note = Note("SSS", "bzzz")
+            noteDataDao.insertNote(note)
+            note = Note("bzzzz")
+            noteDataDao.insertNote(note)
+
+        }
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: NotesDatabase? = null
 
-        fun getDatabase(context: Context): NotesDatabase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
-            }
-            synchronized(this) {
+        fun getDatabase(context: Context, scope: CoroutineScope): NotesDatabase {
+            return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     NotesDatabase::class.java,
-                    "word_database"
-                ).build()
+                    "notes_database"
+                )
+                    .addCallback(NotesDatabaseCallback(scope))
+                    .build()
                 INSTANCE = instance
-                return instance
+                instance
             }
         }
     }
