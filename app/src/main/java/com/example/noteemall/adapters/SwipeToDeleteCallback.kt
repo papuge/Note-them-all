@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.example.noteemall.R
 import android.graphics.Canvas
+import com.example.noteemall.viewModels.NotesViewModel
 
 
 class SwipeToDeleteCallback(

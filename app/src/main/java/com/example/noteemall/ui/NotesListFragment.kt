@@ -7,22 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
-import androidx.transition.Visibility
 import com.example.noteemall.R
 import com.example.noteemall.adapters.NotesAdapter
 import com.example.noteemall.adapters.SwipeToDeleteCallback
 import com.example.noteemall.data.Note
 import com.example.noteemall.viewModels.NotesViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 
 class NotesListFragment : Fragment() {
 
@@ -38,21 +36,26 @@ class NotesListFragment : Fragment() {
     ): View? {
         val view =  inflater.inflate(R.layout.fragment_notes_list, container, false)
 
-        notesAdapter = NotesAdapter(requireContext()) { position ->
-            setUpDetails(position)
-        }
-        notesList = view.findViewById(R.id.notes_list)
-        notesList.adapter = notesAdapter
 
         viewModel = activity?.run {
             ViewModelProviders.of(this)[NotesViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
+        notesAdapter = NotesAdapter(requireContext(), viewModel) { position ->
+            setUpDetails(position)
+        }
+        notesList = view.findViewById(R.id.notes_list)
+        notesList.adapter = notesAdapter
+
         viewModel.allNotes.observe(viewLifecycleOwner, Observer { notes ->
             // Update the cached copy of the words in the adapter.
             notes?.let {
-                notesAdapter.setNotes(it)
+                notesAdapter.setNotes(it.toMutableList())
                 this.notes = it
+//                if (it.isEmpty()) {
+//                    view.findViewById<TextView>(R.id.empty_list_message).visibility =
+//                        VISIBLE
+//                }
             }
         })
 
