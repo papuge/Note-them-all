@@ -33,6 +33,7 @@
         android:id="@+id/tags_scroll"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginStart="@dimen/text_margin_start"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/note_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,8 +43,7 @@
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/tags_chip_group"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="10dp" />
+            android:layout_height="match_parent" />
 
     </HorizontalScrollView>
 

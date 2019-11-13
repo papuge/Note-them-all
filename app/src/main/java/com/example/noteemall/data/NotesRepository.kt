@@ -14,7 +14,7 @@ class NotesRepository(
         val noteId = noteDataDao.insertNote(note)
         Log.d("Repository", "inserted noteId ${noteId}")
         if (tags.isNotEmpty()) {
-            val tagsIds = mutableListOf<Long>()
+            var tagsIds = mutableListOf<Long>()
             for (tag in tags) {
                 val existTagId = noteDataDao.getTagId(tag.tag)
                 if (existTagId == null) {
@@ -24,6 +24,7 @@ class NotesRepository(
                 }
                 Log.d("Repository", "inserted tag ${tag.tag}")
             }
+            tagsIds = tagsIds.distinct().toMutableList()
             for (tagId in tagsIds) {
                 val id = noteTagDao.insertNoteTagJoin(NoteTagJoin(noteId, tagId))
                 Log.d("Repository", "inserted join $id")

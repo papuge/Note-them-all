@@ -36,7 +36,7 @@ class NoteFragment : Fragment() {
         contentTextView = view.findViewById(R.id.note_content)
         contentTextView.movementMethod = ScrollingMovementMethod()
 
-        val tags = arguments?.getStringArrayList(ARG_TAGS)
+        val tags = arguments?.getStringArrayList(ARG_TAGS)?.toList()!!
 
         arguments?.getParcelable<Note>(ARG_NOTE).run {
             headerTextView.text = this?.title ?: ""
@@ -44,13 +44,14 @@ class NoteFragment : Fragment() {
 
             Log.d("NoteFragment", "tags from viewModel: $tags")
 
-            if (tags != null && tags.isNotEmpty()) {
-                for (i in tags.indices + 1) {
-                    val chip = Chip(requireContext())
-                    chip.text = tags[i]
-                    chip.setChipBackgroundColorResource(R.color.colorCardBackground)
-                    chip.isClickable = true
-                    chip.textSize = resources.getDimension(R.dimen.tag_text_size)
+            if (tags.isNotEmpty()) {
+                for (tag in tags) {
+                    val chip = Chip(tagsChipGroup.context).apply {
+                        text = tag
+                        setChipBackgroundColorResource(R.color.colorCardBackground)
+                        isClickable = true
+                        textSize = resources.getDimension(R.dimen.tag_text_size)
+                    }
                     tagsChipGroup.addView(chip)
                 }
             } else {
