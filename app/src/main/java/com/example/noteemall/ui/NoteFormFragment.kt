@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
 import com.example.noteemall.R
@@ -37,12 +38,12 @@ class NoteFormFragment : Fragment() {
         contentEditText = view.findViewById(R.id.form_content_edit_text)
         doneButton = view.findViewById(R.id.form_done_button)
         viewModel = activity?.run {
-            ViewModelProviders.of(this)[NotesViewModel::class.java]
+            ViewModelProvider(this)[NotesViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         doneButton.setOnClickListener {
             var title: String
-            var tagsString: String?
+            val tagsString: String?
             var content: String?
             if (TextUtils.isEmpty(titleEditText.text.toString())) {
                 title = LocalDate.now().toString()
@@ -56,9 +57,5 @@ class NoteFormFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
         return view
-    }
-
-    private fun processTags() {
-        // TODO(): split string to tags
     }
 }

@@ -12,6 +12,9 @@ interface NoteTagDao {
     @Delete
     suspend fun deleteNoteTagJoin(noteTagJoin: NoteTagJoin)
 
+    @Query("SELECT * FROM note_tag_join WHERE fk_note_id = :noteId AND fk_tag_id = :tagId LIMIT 1")
+    suspend fun getNoteTagJoin(noteId: Long, tagId: Long): NoteTagJoin
+
     @Query("DELETE FROM note_tag_join")
     suspend fun deleteAllNoteTagJoins()
 

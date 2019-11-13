@@ -29,22 +29,37 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
         allNotes = repository.allNotes
     }
 
-    fun insertNote (note: Note, tagsString: String) = viewModelScope.launch {
-        val tagsList = separateTags(tagsString)
+    fun insertNote(note: Note, tagsString: String) = viewModelScope.launch {
+        val tagsList = separateTags(tagsString).map { tagStr -> Tag(tagStr) }
         repository.insertNote(note, tagsList)
     }
 
     fun fetchTagsFromNoteAsync(note: Note): List<Tag> = repository.getTagsFromNote(note.id)
-    private fun separateTags(tagsString: String): List<Tag> {
-        return tagsString
-                  ?.split("\\s+".toRegex())
-                  .flatMap {tag -> tag.split("#")}
-                  .filter { tag -> tag != "" }
-                  .map { tagStr -> Tag(tagStr) }
-    }
+
 
     fun deleteNote (note: Note) = viewModelScope.launch {
         repository.deleteNote(note)
+    }
+
+    fun updateNote(
+        note: Note,
+        oldTags: List<String>,
+        newTitle: String,
+        newTagsString: String,
+        newContent: String
+    ) {
+        val oldTagsSet = oldTags.toSet()
+        val newTagsSet = separateTags(newTagsString).toSet()
+        val tagsToDetach = (oldTagsSet subtract newTagsSet).toList()
+        val tagsToAttach = (newTagsSet subtract oldTagsSet).toList()
+        repository.updateNote(note, newTitle, newContent, tagsToDetach, tagsToAttach)
+    }
+
+    private fun separateTags(tagsString: String): List<String> {
+        return tagsString
+            ?.split("\\s+".toRegex())
+            .flatMap {tag -> tag.split("#")}
+            .filter { tag -> tag != "" }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.noteemall.data
 
+import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.runBlocking
@@ -42,8 +43,38 @@ class NotesRepository(
         }
     }
 
-    suspend fun updateNote(note: Note) {
-        noteDataDao.updateNote(note)
+    fun updateNote(
+        note: Note,
+        newTitle: String,
+        newContent: String,
+        tagsToDetach: List<String>,
+        tagsToAttach: List<String>
+        ) {
+        note.title = newTitle
+        note.content = newContent
+        runBlocking {
+            Log.d("Repository", "tags to detach $tagsToDetach")
+            for (tag in tagsToDetach) {
+                val tagId = noteDataDao.getTagId(tag)
+                if (tagId != null) {
+                    val noteTagJoin = noteTagDao.getNoteTagJoin(note.id, tagId)
+                    noteTagDao.deleteNoteTagJoin(noteTagJoin)
+                }
+            }
+            Log.d("Repository", "tags to attach $tagsToAttach")
+            for (tag in tagsToAttach) {
+                var tagId = noteDataDao.getTagId(tag)
+                val noteTagJoin: NoteTagJoin
+                if (tagId == null) {
+                    tagId = noteDataDao.insertTag(Tag(tag))
+                    noteTagJoin = NoteTagJoin(note.id, tagId)
+                } else {
+                    noteTagJoin = NoteTagJoin(note.id, tagId)
+                }
+                noteTagDao.insertNoteTagJoin(noteTagJoin)
+            }
+            noteDataDao.updateNote(note)
+        }
     }
 
     suspend fun deleteNote(note: Note) {
@@ -52,14 +83,6 @@ class NotesRepository(
             noteTagDao.deleteNoteTagJoin(NoteTagJoin(note.id, tag.id))
         }
         noteDataDao.deleteNote(note)
-    }
-
-    suspend fun insertTags(vararg tags: Tag) {
-        noteDataDao.insertTags(*tags)
-    }
-
-    suspend fun deleteTag(tag: Tag) {
-        noteDataDao.deleteTag(tag)
     }
 
 }

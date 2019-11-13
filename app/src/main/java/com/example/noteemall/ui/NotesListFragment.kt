@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
 import com.example.noteemall.R
@@ -38,7 +39,7 @@ class NotesListFragment : Fragment() {
 
 
         viewModel = activity?.run {
-            ViewModelProviders.of(this)[NotesViewModel::class.java]
+            ViewModelProvider(this)[NotesViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         notesAdapter = NotesAdapter(requireContext(), viewModel) { position ->

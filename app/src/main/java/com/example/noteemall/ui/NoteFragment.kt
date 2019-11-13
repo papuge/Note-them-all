@@ -17,6 +17,7 @@ import android.widget.HorizontalScrollView
 import com.example.noteemall.data.Note
 import com.example.noteemall.data.Tag
 import com.example.noteemall.viewModels.NotesViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class NoteFragment : Fragment() {
@@ -24,6 +25,7 @@ class NoteFragment : Fragment() {
     private lateinit var headerTextView: TextView
     private lateinit var tagsChipGroup: ChipGroup
     private lateinit var contentTextView: TextView
+    private lateinit var editNoteButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +37,13 @@ class NoteFragment : Fragment() {
         tagsChipGroup = view.findViewById(R.id.tags_chip_group)
         contentTextView = view.findViewById(R.id.note_content)
         contentTextView.movementMethod = ScrollingMovementMethod()
+        editNoteButton = view.findViewById(R.id.edit_note_button)
+
 
         val tags = arguments?.getStringArrayList(ARG_TAGS)?.toList()!!
 
-        arguments?.getParcelable<Note>(ARG_NOTE).run {
+        val note = arguments?.getParcelable<Note>(ARG_NOTE)
+        note.run {
             headerTextView.text = this?.title ?: ""
             contentTextView.text = this?.content ?: ""
 
@@ -58,6 +63,10 @@ class NoteFragment : Fragment() {
                 view.findViewById<HorizontalScrollView>(R.id.tags_scroll).visibility = GONE
             }
         }
+
+        editNoteButton.setOnClickListener {
+            redirectToEditFragment(note!!, tags)
+        }
         return view
     }
 
@@ -76,5 +85,15 @@ class NoteFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    private fun redirectToEditFragment(note: Note, tags: List<String>) {
+        val fragmentManager = activity?.supportFragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        val fragment = NoteEditFormFragment.newInstance(note, tags)
+        fragmentTransaction
+            ?.addToBackStack(null)
+            ?.replace(R.id.fragment_container, fragment)
+            ?.commit()
     }
 }
