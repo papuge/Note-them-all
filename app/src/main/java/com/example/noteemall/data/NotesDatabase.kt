@@ -58,7 +58,7 @@ abstract class NotesDatabase: RoomDatabase() {
                     NotesDatabase::class.java,
                     "notes_database"
                 )
-                    .addCallback(NotesDatabaseCallback(scope))
+                    //addCallback(NotesDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance

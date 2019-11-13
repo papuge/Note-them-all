@@ -91,6 +91,7 @@ class NoteFragment : Fragment() {
         val fragmentManager = activity?.supportFragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         val fragment = NoteEditFormFragment.newInstance(note, tags)
+        fragmentManager?.popBackStack()
         fragmentTransaction
             ?.addToBackStack(null)
             ?.replace(R.id.fragment_container, fragment)

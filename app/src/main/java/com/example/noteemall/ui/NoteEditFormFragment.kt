@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteemall.R
 import com.example.noteemall.data.Note
@@ -29,6 +31,8 @@ class NoteEditFormFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view =  inflater.inflate(R.layout.fragment_note_form, container, false)
+
+
         viewModel = activity?.run {
             ViewModelProvider(this)[NotesViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
@@ -44,9 +48,20 @@ class NoteEditFormFragment: Fragment() {
         contentEditText = view.findViewById(R.id.form_content_edit_text)
         contentEditText.setText(note.content)
         doneButton = view.findViewById(R.id.form_done_button)
+
+        // To redirect to note fragment instead of list of notes
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    redirectToNoteFragment(note)
+                }
+            }
+        )
+
         doneButton.setOnClickListener {
             updateNote(note, tags)
-            activity?.supportFragmentManager?.popBackStack()
+            redirectToNoteFragment(note)
         }
         return view
     }
@@ -75,5 +90,16 @@ class NoteEditFormFragment: Fragment() {
             title = titleEditText.text.toString()
         }
         viewModel.updateNote(note, oldTags, title, tagsString, content)
+    }
+
+    private fun redirectToNoteFragment(note: Note) {
+        val fragmentManager = activity?.supportFragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        val fragment = NoteFragment.newInstance(note, viewModel)
+        fragmentManager?.popBackStack()
+        fragmentTransaction
+            ?.addToBackStack(null)
+            ?.replace(R.id.fragment_container, fragment)
+            ?.commit()
     }
 }
