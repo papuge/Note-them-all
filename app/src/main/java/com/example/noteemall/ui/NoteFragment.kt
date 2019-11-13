@@ -14,13 +14,9 @@ import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View.GONE
 import android.widget.HorizontalScrollView
-import android.widget.ScrollView
 import com.example.noteemall.data.Note
 import com.example.noteemall.data.Tag
 import com.example.noteemall.viewModels.NotesViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 
 
 class NoteFragment : Fragment() {
@@ -66,16 +62,16 @@ class NoteFragment : Fragment() {
 
     companion object {
 
-        private val ARG_NOTE: String = "ARG_NOTE"
-        private val ARG_TAGS: String = "ARG_TAGS"
+        private const val ARG_NOTE: String = "ARG_NOTE"
+        private const val ARG_TAGS: String = "ARG_TAGS"
 
         fun newInstance(note: Note?, viewModel: NotesViewModel): NoteFragment {
             val fragment = NoteFragment()
             val bundle = Bundle()
             val tags = viewModel.fetchTagsFromNoteAsync(note!!)
-            val array_tags = ArrayList<String>(tags.map { tag -> tag.tag })
+            val arrayTags = ArrayList<String>(tags.map { tag -> tag.tag })
             bundle.putParcelable(ARG_NOTE, note)
-            bundle.putStringArrayList(ARG_TAGS, array_tags)
+            bundle.putStringArrayList(ARG_TAGS, arrayTags)
             fragment.arguments = bundle
             return fragment
         }

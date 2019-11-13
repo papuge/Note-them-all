@@ -46,6 +46,10 @@ class NotesRepository(
     }
 
     suspend fun deleteNote(note: Note) {
+        val notePojo: NoteWithTagsPojo = noteTagDao.getNoteWithTags(note.id)
+        for (tag in notePojo.tags) {
+            noteTagDao.deleteNoteTagJoin(NoteTagJoin(note.id, tag.id))
+        }
         noteDataDao.deleteNote(note)
     }
 
