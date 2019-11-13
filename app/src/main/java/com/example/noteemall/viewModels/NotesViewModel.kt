@@ -5,10 +5,11 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.noteemall.data.Note
-import com.example.noteemall.data.NotesDatabase
-import com.example.noteemall.data.NotesRepository
+import com.example.noteemall.data.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class NotesViewModel(application: Application): AndroidViewModel(application) {
 
@@ -28,8 +29,18 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
         allNotes = repository.allNotes
     }
 
-    fun insertNote (note: Note) = viewModelScope.launch {
-        repository.insertNote(note)
+    fun insertNote (note: Note, tagsString: String) = viewModelScope.launch {
+        val tagsList = separateTags(tagsString)
+        repository.insertNote(note, tagsList)
+    }
+
+    fun fetchTagsFromNoteAsync(note: Note): List<Tag> = repository.getTagsFromNote(note.id)
+    private fun separateTags(tagsString: String): List<Tag> {
+        return tagsString
+                  ?.split("\\s+".toRegex())
+                  .flatMap {tag -> tag.split("#")}
+                  .filter { tag -> tag != "" }
+                  .map { tagStr -> Tag(tagStr) }
     }
 
     fun deleteNote (note: Note) = viewModelScope.launch {

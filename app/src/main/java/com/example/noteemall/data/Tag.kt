@@ -8,10 +8,11 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "tags",
     indices = [Index("tag_id")]
-    )
+)
 data class Tag (
+    @ColumnInfo(name = "tag") var tag: String,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "tag_id")
-    var id: Long,
-    @ColumnInfo(name = "tag") var tag: String
+    var id: Long = 0
+
 )

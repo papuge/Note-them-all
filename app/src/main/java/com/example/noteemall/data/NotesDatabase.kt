@@ -28,13 +28,16 @@ abstract class NotesDatabase: RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.noteDataDao())
+                    populateDatabase(database.noteDataDao(),
+                        database.noteTagDao())
                 }
             }
         }
 
-        suspend fun populateDatabase(noteDataDao: NoteDataDao) {
+        suspend fun populateDatabase(noteDataDao: NoteDataDao, noteTagDao: NoteTagDao) {
+            noteTagDao.deleteAllNoteTagJoins()
             noteDataDao.deleteAllNotes()
+            noteDataDao.deleteAllTags()
 
             var note = Note("SSS", "bzzz")
             noteDataDao.insertNote(note)

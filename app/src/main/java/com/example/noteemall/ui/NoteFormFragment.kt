@@ -52,7 +52,7 @@ class NoteFormFragment : Fragment() {
             tagsString = tagsEditText.text.toString()
             content = contentEditText.text.toString()
             val note = Note(title, content)
-            viewModel.insertNote(note)
+            viewModel.insertNote(note, tagsString)
             activity?.supportFragmentManager?.popBackStack()
         }
         return view

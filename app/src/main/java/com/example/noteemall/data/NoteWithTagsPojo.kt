@@ -14,7 +14,7 @@ class NoteWithTagsPojo {
         associateBy = Junction(
             value = NoteTagJoin::class,
             parentColumn = "fk_note_id",
-            entityColumn = "fk_note_id"
+            entityColumn = "fk_tag_id"
         )
     )
     var tags: List<Tag> = arrayListOf()

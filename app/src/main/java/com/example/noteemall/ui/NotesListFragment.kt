@@ -86,7 +86,7 @@ class NotesListFragment : Fragment() {
         val note = notes?.get(position)
         val fragmentManager = activity?.supportFragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
-        val fragment = NoteFragment.newInstance(note)
+        val fragment = NoteFragment.newInstance(note, viewModel)
         fragmentTransaction
             ?.addToBackStack(null)
             ?.replace(R.id.fragment_container, fragment)

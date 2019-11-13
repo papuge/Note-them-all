@@ -11,7 +11,16 @@ import com.example.noteemall.R
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
+import android.view.View.GONE
+import android.widget.HorizontalScrollView
+import android.widget.ScrollView
 import com.example.noteemall.data.Note
+import com.example.noteemall.data.Tag
+import com.example.noteemall.viewModels.NotesViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 
 class NoteFragment : Fragment() {
@@ -31,17 +40,25 @@ class NoteFragment : Fragment() {
         contentTextView = view.findViewById(R.id.note_content)
         contentTextView.movementMethod = ScrollingMovementMethod()
 
+        val tags = arguments?.getStringArrayList(ARG_TAGS)
+
         arguments?.getParcelable<Note>(ARG_NOTE).run {
             headerTextView.text = this?.title ?: ""
             contentTextView.text = this?.content ?: ""
 
-            for (i in 1..5) {
-                val chip = Chip(requireContext())
-                chip.text = this?.title ?: ""
-                chip.setChipBackgroundColorResource(R.color.colorCardBackground)
-                chip.isClickable = true
-                chip.textSize = resources.getDimension(R.dimen.tag_text_size)
-                tagsChipGroup.addView(chip)
+            Log.d("NoteFragment", "tags from viewModel: $tags")
+
+            if (tags != null && tags.isNotEmpty()) {
+                for (i in tags.indices + 1) {
+                    val chip = Chip(requireContext())
+                    chip.text = tags[i]
+                    chip.setChipBackgroundColorResource(R.color.colorCardBackground)
+                    chip.isClickable = true
+                    chip.textSize = resources.getDimension(R.dimen.tag_text_size)
+                    tagsChipGroup.addView(chip)
+                }
+            } else {
+                view.findViewById<HorizontalScrollView>(R.id.tags_scroll).visibility = GONE
             }
         }
         return view
@@ -49,12 +66,16 @@ class NoteFragment : Fragment() {
 
     companion object {
 
-        private val ARG_NOTE: String = "ARG_VALS"
+        private val ARG_NOTE: String = "ARG_NOTE"
+        private val ARG_TAGS: String = "ARG_TAGS"
 
-        fun newInstance(note: Note?): NoteFragment {
+        fun newInstance(note: Note?, viewModel: NotesViewModel): NoteFragment {
             val fragment = NoteFragment()
             val bundle = Bundle()
+            val tags = viewModel.fetchTagsFromNoteAsync(note!!)
+            val array_tags = ArrayList<String>(tags.map { tag -> tag.tag })
             bundle.putParcelable(ARG_NOTE, note)
+            bundle.putStringArrayList(ARG_TAGS, array_tags)
             fragment.arguments = bundle
             return fragment
         }
