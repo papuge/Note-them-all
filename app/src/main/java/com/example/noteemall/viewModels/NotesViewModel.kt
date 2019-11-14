@@ -2,10 +2,7 @@ package com.example.noteemall.viewModels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.noteemall.data.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -17,10 +14,13 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
     private val repository: NotesRepository
     private val notesOrderedByTitle: LiveData<List<Note>>
     private val notesOrderedByDate: LiveData<List<Note>>
-    val allNotes = MediatorLiveData<List<Note>>()
+    private val notesFiltered: LiveData<List<Note>>
+    var allNotes = MediatorLiveData<List<Note>>()
+    var tagSearchString = MutableLiveData<String>()
     val TAG = "NotesViewModel"
     enum class NotesOrder { BY_TITLE, BY_DATE }
     private var currentOrder: NotesOrder
+
 
     init {
         Log.d(TAG, "DB was not created")
@@ -32,6 +32,10 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
         repository = NotesRepository(noteDataDao, noteTagDao)
         notesOrderedByTitle = repository.notesByTitle
         notesOrderedByDate = repository.notesByDate
+        notesFiltered = Transformations.switchMap(
+            tagSearchString,
+            { repository.getNotesByTag(it) }
+        )
         currentOrder = NotesOrder.BY_DATE
 
         allNotes.addSource(notesOrderedByTitle) { result ->
@@ -44,6 +48,7 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
                 result?.let { allNotes.value = it }
             }
         }
+        allNotes.addSource(notesFiltered) { }
     }
 
     fun insertNote(note: Note, tagsString: String) = viewModelScope.launch {
@@ -79,8 +84,25 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
             .filter { tag -> tag != "" }
     }
 
+    fun setAllNotes() {
+        if (currentOrder == NotesOrder.BY_TITLE) {
+            notesOrderedByTitle.value?.let { allNotes.value = it }
+        } else {
+            notesOrderedByDate.value?.let { allNotes.value = it }
+        }
+    }
+
     fun rearrangeNotes(order: NotesOrder) = when (order) {
         NotesOrder.BY_TITLE -> notesOrderedByTitle.value?.let { allNotes.value = it }
         NotesOrder.BY_DATE -> notesOrderedByDate.value?.let { allNotes.value = it }
     }.also { currentOrder = order }
+
+    fun searchTags() {
+        if (tagSearchString.value == "")
+            setAllNotes()
+        else {
+            notesFiltered.value?.let { allNotes.value = it }
+            Log.d("ViewModel", "allNotes are updated")
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.example.noteemall.data
 import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.runBlocking
 
 class NotesRepository(
@@ -42,6 +43,18 @@ class NotesRepository(
         return@runBlocking when {
             notePojo.tags.isNotEmpty() -> notePojo.tags
             else -> listOf()
+        }
+    }
+
+    fun getNotesByTag(tagString: String): MutableLiveData<List<Note>>  = runBlocking {
+        Log.d("Repository", "Tag string is ${tagString}")
+        val tagPojo: TagWithNotesPojo = noteTagDao.getTagWithNotes("${tagString}%")
+        return@runBlocking when {
+            tagPojo != null -> {
+                Log.d("Repository", "Gettin notes ${tagPojo.notes}")
+                MutableLiveData<List<Note>>(tagPojo.notes)
+            }
+            else -> MutableLiveData(listOf())
         }
     }
 

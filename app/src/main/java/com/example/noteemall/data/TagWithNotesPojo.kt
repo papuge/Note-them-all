@@ -12,8 +12,8 @@ class TagWithNotesPojo {
     lateinit var tag: Tag
 
     @Relation(
-        entityColumn = "note_id",
         parentColumn = "tag_id",
+        entityColumn = "note_id",
         associateBy = Junction(
             value = NoteTagJoin::class,
             parentColumn = "fk_tag_id",

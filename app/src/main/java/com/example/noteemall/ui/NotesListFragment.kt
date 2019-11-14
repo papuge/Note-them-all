@@ -8,10 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -34,6 +31,7 @@ class NotesListFragment : Fragment() {
     private lateinit var notes: List<Note>
     private lateinit var newButton: FloatingActionButton
     private  lateinit var sortButton: ImageButton
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +73,25 @@ class NotesListFragment : Fragment() {
         sortButton.setOnClickListener {
             showPopup(it)
         }
+        searchView = view.findViewById(R.id.notes_search)
+        searchView.setOnCloseListener(object: SearchView.OnCloseListener {
+            override fun onClose(): Boolean {
+                viewModel.setAllNotes()
+                return false
+            }
+        })
+        searchView.setOnQueryTextListener (object : SearchView.OnQueryTextListener {
 
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.tagSearchString.value = searchView.query.toString()
+                viewModel.searchTags()
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+        })
         return view
     }
 
