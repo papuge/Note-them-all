@@ -1,6 +1,5 @@
 package com.example.noteemall.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -17,9 +16,6 @@ interface NoteTagDao {
 
     @Query("DELETE FROM note_tag_join")
     suspend fun deleteAllNoteTagJoins()
-
-//    @Transaction @Query("SELECT * FROM notes")
-//    suspend fun getAllNotesWithTags(): LiveData<List<NoteWithTagsPojo>>
 
     @Transaction @Query("SELECT * FROM notes WHERE note_id == :noteId")
     suspend fun getNoteWithTags(noteId: Long): NoteWithTagsPojo

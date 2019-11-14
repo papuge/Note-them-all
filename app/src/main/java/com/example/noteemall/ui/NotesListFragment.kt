@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
 import com.example.noteemall.R
 import com.example.noteemall.adapters.NotesAdapter
@@ -19,9 +17,6 @@ import com.example.noteemall.adapters.SwipeToDeleteCallback
 import com.example.noteemall.data.Note
 import com.example.noteemall.viewModels.NotesViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 
 class NotesListFragment : Fragment() {
 
@@ -55,10 +50,6 @@ class NotesListFragment : Fragment() {
             notes?.let {
                 notesAdapter.setNotes(it.toMutableList())
                 this.notes = it
-//                if (it.isEmpty()) {
-//                    view.findViewById<TextView>(R.id.empty_list_message).visibility =
-//                        VISIBLE
-//                }
             }
         })
 
@@ -74,12 +65,10 @@ class NotesListFragment : Fragment() {
             showPopup(it)
         }
         searchView = view.findViewById(R.id.notes_search)
-        searchView.setOnCloseListener(object: SearchView.OnCloseListener {
-            override fun onClose(): Boolean {
-                viewModel.setAllNotes()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            viewModel.setAllNotes()
+            false
+        }
         searchView.setOnQueryTextListener (object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
@@ -109,7 +98,7 @@ class NotesListFragment : Fragment() {
     }
 
     private fun setUpDetails(position: Int) {
-        val note = notes?.get(position)
+        val note = notes[position]
         val fragmentManager = activity?.supportFragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         val fragment = NoteFragment.newInstance(note, viewModel)
@@ -130,12 +119,10 @@ class NotesListFragment : Fragment() {
     }
 
     private fun showPopup(view: View) {
-        var popup: PopupMenu? = null;
-        popup = PopupMenu(requireContext(), view)
+        val popup = PopupMenu(requireContext(), view)
         popup.inflate(R.menu.sort_menu)
 
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
+        popup.setOnMenuItemClickListener { item: MenuItem? ->
             when (item!!.itemId) {
                 R.id.by_title_option -> {
                     viewModel.rearrangeNotes(NotesViewModel.NotesOrder.BY_TITLE)
@@ -144,10 +131,8 @@ class NotesListFragment : Fragment() {
                     viewModel.rearrangeNotes(NotesViewModel.NotesOrder.BY_DATE)
                 }
             }
-
             true
-        })
-
+        }
         popup.show()
     }
 }

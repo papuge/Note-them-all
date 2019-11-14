@@ -8,4 +8,6 @@
     <string name="tags">Tags</string>
     <string name="title">Title</string>
     <string name="search_for_tags">Search for tags</string>
+    <string name="delete">Delete</string>
+    <string name="sort_notes">Sort notes</string>
 </resources>

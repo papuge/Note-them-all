@@ -1,7 +1,6 @@
 package com.example.noteemall.ui
 
-import android.content.Context
-import android.net.Uri
+
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -11,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-
 import com.example.noteemall.R
 import com.example.noteemall.data.Note
 import com.example.noteemall.viewModels.NotesViewModel
@@ -42,14 +39,13 @@ class NoteFormFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         doneButton.setOnClickListener {
-            var title: String
-            val tagsString: String?
-            var content: String?
-            if (TextUtils.isEmpty(titleEditText.text.toString())) {
-                title = LocalDate.now().toString()
+            val title: String = if (TextUtils.isEmpty(titleEditText.text.toString())) {
+                LocalDate.now().toString()
             } else {
-                title = titleEditText.text.toString()
+                titleEditText.text.toString()
             }
+            val tagsString: String?
+            val content: String?
             tagsString = tagsEditText.text.toString()
             content = contentEditText.text.toString()
             val note = Note(title, content)

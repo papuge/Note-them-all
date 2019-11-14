@@ -4,9 +4,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
 import kotlinx.android.parcel.Parcelize
-import org.jetbrains.annotations.NotNull
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 @Entity(tableName = "notes", indices = [Index("note_id")])

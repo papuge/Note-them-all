@@ -79,14 +79,13 @@ class NoteEditFormFragment: Fragment() {
         }
     }
     private fun updateNote(note: Note, oldTags: List<String>) {
-        val title: String
-        val tagsString: String = tagsEditText.text.toString()
-        val content: String = contentEditText.text.toString()
-        title = if (TextUtils.isEmpty(titleEditText.text.toString())) {
+        val title: String = if (TextUtils.isEmpty(titleEditText.text.toString())) {
             LocalDate.now().toString()
         } else {
             titleEditText.text.toString()
         }
+        val tagsString: String = tagsEditText.text.toString()
+        val content: String = contentEditText.text.toString()
         viewModel.updateNote(note, oldTags, title, tagsString, content)
     }
 

@@ -53,7 +53,6 @@ class NoteFragment : Fragment() {
                     val chip = Chip(tagsChipGroup.context).apply {
                         text = tag
                         setChipBackgroundColorResource(R.color.colorCardBackground)
-                        isClickable = true
                         textSize = resources.getDimension(R.dimen.tag_text_size)
                     }
                     tagsChipGroup.addView(chip)
@@ -96,4 +95,5 @@ class NoteFragment : Fragment() {
             ?.replace(R.id.fragment_container, fragment)
             ?.commit()
     }
+
 }

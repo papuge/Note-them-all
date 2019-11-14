@@ -1,6 +1,5 @@
 package com.example.noteemall.data
 
-import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +14,7 @@ class NotesRepository(
 
     suspend fun insertNote(note: Note, tags: List<Tag>) {
         val noteId = noteDataDao.insertNote(note)
-        Log.d("Repository", "inserted noteId ${noteId}")
+        Log.d("Repository", "inserted noteId $noteId")
         Log.d("Repository", "inserted noteId ${note.creationDate}")
         if (tags.isNotEmpty()) {
             var tagsIds = mutableListOf<Long>()
@@ -38,7 +37,7 @@ class NotesRepository(
 
     fun getTagsFromNote(noteId: Long): List<Tag>  = runBlocking {
         val notePojo: NoteWithTagsPojo = noteTagDao.getNoteWithTags(noteId)
-        Log.d("Repository", "requested noteId ${noteId}")
+        Log.d("Repository", "requested noteId $noteId")
         Log.d("Repository", "Gettin tags ${notePojo.tags}")
         return@runBlocking when {
             notePojo.tags.isNotEmpty() -> notePojo.tags
@@ -47,15 +46,9 @@ class NotesRepository(
     }
 
     fun getNotesByTag(tagString: String): MutableLiveData<List<Note>>  = runBlocking {
-        Log.d("Repository", "Tag string is ${tagString}")
-        val tagPojo: TagWithNotesPojo = noteTagDao.getTagWithNotes("${tagString}%")
-        return@runBlocking when {
-            tagPojo != null -> {
-                Log.d("Repository", "Gettin notes ${tagPojo.notes}")
-                MutableLiveData<List<Note>>(tagPojo.notes)
-            }
-            else -> MutableLiveData(listOf())
-        }
+        Log.d("Repository", "Tag string is $tagString")
+        val tagPojo: TagWithNotesPojo = noteTagDao.getTagWithNotes("$tagString%")
+        return@runBlocking MutableLiveData<List<Note>>(tagPojo.notes)
     }
 
     fun updateNote(
