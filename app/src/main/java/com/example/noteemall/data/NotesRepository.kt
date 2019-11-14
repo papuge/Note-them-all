@@ -14,6 +14,7 @@ class NotesRepository(
     suspend fun insertNote(note: Note, tags: List<Tag>) {
         val noteId = noteDataDao.insertNote(note)
         Log.d("Repository", "inserted noteId ${noteId}")
+        Log.d("Repository", "inserted noteId ${note.creationDate}")
         if (tags.isNotEmpty()) {
             var tagsIds = mutableListOf<Long>()
             for (tag in tags) {

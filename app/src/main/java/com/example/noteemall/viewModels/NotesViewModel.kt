@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 class NotesViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: NotesRepository
+
     val allNotes: LiveData<List<Note>>
     val TAG = "NotesViewModel"
 

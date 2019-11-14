@@ -1,7 +1,6 @@
 package com.example.noteemall.ui
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteemall.R
 import com.example.noteemall.data.Note
@@ -50,7 +48,7 @@ class NoteEditFormFragment: Fragment() {
         doneButton = view.findViewById(R.id.form_done_button)
 
         // To redirect to note fragment instead of list of notes
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(
+        requireActivity().onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -81,13 +79,13 @@ class NoteEditFormFragment: Fragment() {
         }
     }
     private fun updateNote(note: Note, oldTags: List<String>) {
-        var title: String
+        val title: String
         val tagsString: String = tagsEditText.text.toString()
-        var content: String = contentEditText.text.toString()
-        if (TextUtils.isEmpty(titleEditText.text.toString())) {
-            title = LocalDate.now().toString()
+        val content: String = contentEditText.text.toString()
+        title = if (TextUtils.isEmpty(titleEditText.text.toString())) {
+            LocalDate.now().toString()
         } else {
-            title = titleEditText.text.toString()
+            titleEditText.text.toString()
         }
         viewModel.updateNote(note, oldTags, title, tagsString, content)
     }

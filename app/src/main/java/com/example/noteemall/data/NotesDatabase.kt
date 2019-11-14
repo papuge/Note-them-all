@@ -5,17 +5,23 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
+import androidx.room.migration.Migration
+import android.icu.lang.UCharacter.GraphemeClusterBreak.V
+
+
 
 @Database(
     entities = [Note::class, Tag::class, NoteTagJoin::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class NotesDatabase: RoomDatabase() {
     abstract fun noteDataDao(): NoteDataDao
     abstract fun noteTagDao(): NoteTagDao
@@ -58,7 +64,8 @@ abstract class NotesDatabase: RoomDatabase() {
                     NotesDatabase::class.java,
                     "notes_database"
                 )
-                    //addCallback(NotesDatabaseCallback(scope))
+                    //.addCallback(NotesDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
