@@ -4,10 +4,13 @@ import android.content.res.Configuration
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +33,7 @@ class NotesListFragment : Fragment() {
     private lateinit var viewModel: NotesViewModel
     private lateinit var notes: List<Note>
     private lateinit var newButton: FloatingActionButton
+    private  lateinit var sortButton: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +71,11 @@ class NotesListFragment : Fragment() {
             redirectToNewFragment()
         }
 
+        sortButton = view.findViewById(R.id.sort_image_button)
+        sortButton.setOnClickListener {
+            showPopup(it)
+        }
+
         return view
     }
 
@@ -102,5 +111,27 @@ class NotesListFragment : Fragment() {
             ?.addToBackStack(null)
             ?.replace(R.id.fragment_container, fragment)
             ?.commit()
+    }
+
+    private fun showPopup(view: View) {
+        var popup: PopupMenu? = null;
+        popup = PopupMenu(requireContext(), view)
+        popup.inflate(R.menu.sort_menu)
+
+        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
+
+            when (item!!.itemId) {
+                R.id.by_title_option -> {
+                    viewModel.rearrangeNotes(NotesViewModel.NotesOrder.BY_TITLE)
+                }
+                R.id.by_date_option -> {
+                    viewModel.rearrangeNotes(NotesViewModel.NotesOrder.BY_DATE)
+                }
+            }
+
+            true
+        })
+
+        popup.show()
     }
 }

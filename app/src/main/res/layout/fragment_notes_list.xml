@@ -7,13 +7,36 @@
     tools:context=".ui.NotesListFragment"
     tools:showIn="@layout/activity_main">
 
+    <SearchView
+        android:id="@+id/notes_search"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:queryHint="@string/search_for_tags"
+        app:layout_constraintEnd_toStartOf="@+id/sort_image_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/notes_list" />
+
+    <ImageButton
+        android:id="@+id/sort_image_button"
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_sort_primary_24dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/notes_search"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/notes_list"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notes_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         tools:itemCount="5"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notes_search"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/note_row" />
 
     <TextView

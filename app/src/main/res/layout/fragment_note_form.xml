@@ -84,8 +84,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:inputType="text"
-            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionGo"
             android:hint="@string/note_it_all_here"
             android:padding="15dp" />
     </ScrollView>

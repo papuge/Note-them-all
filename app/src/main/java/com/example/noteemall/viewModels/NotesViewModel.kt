@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.noteemall.data.*
 import kotlinx.coroutines.Deferred
@@ -14,20 +15,35 @@ import kotlinx.coroutines.runBlocking
 class NotesViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: NotesRepository
-
-    val allNotes: LiveData<List<Note>>
+    private val notesOrderedByTitle: LiveData<List<Note>>
+    private val notesOrderedByDate: LiveData<List<Note>>
+    val allNotes = MediatorLiveData<List<Note>>()
     val TAG = "NotesViewModel"
+    enum class NotesOrder { BY_TITLE, BY_DATE }
+    private var currentOrder: NotesOrder
 
     init {
         Log.d(TAG, "DB was not created")
         val db = NotesDatabase.getDatabase(application, viewModelScope)
         Log.d(TAG, "DB was created")
         val noteDataDao = db.run { noteDataDao() }
-        Log.d(TAG, "The first dao access")
         val noteTagDao = db.run { noteTagDao() }
-        Log.d(TAG, "The second dao access")
+
         repository = NotesRepository(noteDataDao, noteTagDao)
-        allNotes = repository.allNotes
+        notesOrderedByTitle = repository.notesByTitle
+        notesOrderedByDate = repository.notesByDate
+        currentOrder = NotesOrder.BY_DATE
+
+        allNotes.addSource(notesOrderedByTitle) { result ->
+            if (currentOrder == NotesOrder.BY_TITLE) {
+                result?.let { allNotes.value = it }
+            }
+        }
+        allNotes.addSource(notesOrderedByDate) { result ->
+            if (currentOrder == NotesOrder.BY_DATE) {
+                result?.let { allNotes.value = it }
+            }
+        }
     }
 
     fun insertNote(note: Note, tagsString: String) = viewModelScope.launch {
@@ -63,4 +79,8 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
             .filter { tag -> tag != "" }
     }
 
+    fun rearrangeNotes(order: NotesOrder) = when (order) {
+        NotesOrder.BY_TITLE -> notesOrderedByTitle.value?.let { allNotes.value = it }
+        NotesOrder.BY_DATE -> notesOrderedByDate.value?.let { allNotes.value = it }
+    }.also { currentOrder = order }
 }

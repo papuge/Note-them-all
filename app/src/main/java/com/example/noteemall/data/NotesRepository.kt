@@ -9,7 +9,8 @@ class NotesRepository(
     private val noteDataDao: NoteDataDao,
     private val noteTagDao: NoteTagDao
 ) {
-    val allNotes: LiveData<List<Note>> = noteDataDao.getAllNotesByTitle()
+    val notesByTitle: LiveData<List<Note>> = noteDataDao.getAllNotesByTitle()
+    val notesByDate: LiveData<List<Note>> = noteDataDao.getAllNotesByDate()
 
     suspend fun insertNote(note: Note, tags: List<Tag>) {
         val noteId = noteDataDao.insertNote(note)

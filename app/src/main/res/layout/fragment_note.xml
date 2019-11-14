@@ -22,7 +22,8 @@
             android:layout_height="match_parent"
             android:maxLines="1"
             android:ellipsize="end"
-            android:padding="15dp"
+            android:layout_marginHorizontal="15dp"
+            android:gravity="center"
             android:text="Header"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/note_header_text_size" />

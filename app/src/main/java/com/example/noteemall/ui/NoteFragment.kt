@@ -41,7 +41,6 @@ class NoteFragment : Fragment() {
 
 
         val tags = arguments?.getStringArrayList(ARG_TAGS)?.toList()!!
-
         val note = arguments?.getParcelable<Note>(ARG_NOTE)
         note.run {
             headerTextView.text = this?.title ?: ""
