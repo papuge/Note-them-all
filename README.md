@@ -10,7 +10,7 @@ git clone https://github.com/papuge/Note-them-all.git
 ## Usage
 Creating new note is simple as it should be.  
 - If no title provided current date will be selected.  
-- To add tags write them separated tags by spaces ('#' can be ommited).  
+- To add tags write them separated by spaces ('#' can be ommited).  
 
 <img src="./screens/screen1.png" width="30%" /> <img src="./screens/screen2.png" width="30%" /> <img src="./screens/screen3.png" width="30%" />  
 
@@ -20,10 +20,10 @@ Creating new note is simple as it should be.
 
 <img src="./screens/screen4.png" width="70%" />
 
-- You can also sort notes by title or creation date  
+- You can also sort notes by title or creation date.  
 
 <img src="./screens/screen5.png" width="40%" />  
 
-- And filter notes by tags 
+- And filter notes by tags.  
 
 <img src="./screens/screen6.png" width="40%" />  
