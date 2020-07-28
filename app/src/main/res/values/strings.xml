@@ -10,4 +10,5 @@
     <string name="search_for_tags">Search for tags</string>
     <string name="delete">Delete</string>
     <string name="sort_notes">Sort notes</string>
+    <string name="title_hint">Title</string>
 </resources>

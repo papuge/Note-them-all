@@ -47,8 +47,11 @@ class NotesRepository(
 
     fun getNotesByTag(tagString: String): MutableLiveData<List<Note>>  = runBlocking {
         Log.d("Repository", "Tag string is $tagString")
-        val tagPojo: TagWithNotesPojo = noteTagDao.getTagWithNotes("$tagString%")
-        return@runBlocking MutableLiveData<List<Note>>(tagPojo.notes)
+        val tagPojo: TagWithNotesPojo? = noteTagDao.getTagWithNotes("$tagString%")
+        return@runBlocking when {
+            tagPojo != null ->  MutableLiveData<List<Note>>(tagPojo.notes)
+            else -> MutableLiveData<List<Note>>()
+        }
     }
 
     fun updateNote(

@@ -21,6 +21,6 @@ interface NoteTagDao {
     suspend fun getNoteWithTags(noteId: Long): NoteWithTagsPojo
 
     @Transaction @Query("SELECT * FROM tags WHERE tag LIKE :tagString LIMIT 1")
-    suspend fun getTagWithNotes(tagString: String): TagWithNotesPojo
+    suspend fun getTagWithNotes(tagString: String): TagWithNotesPojo?
 
 }

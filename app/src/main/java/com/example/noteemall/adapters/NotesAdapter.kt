@@ -20,20 +20,20 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = notes.size
 
-    fun getNote(position: Int) =  notes?.get(position)
+    private fun getNote(position: Int) =  notes[position]
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (itemCount != 0)
-            holder.bind(getNote(position))
+        holder.bind(getNote(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewHolder = ViewHolder(inflater.inflate(R.layout.note_row, parent, false),
-            clickListener) { position ->
+        return ViewHolder(
+            inflater.inflate(R.layout.note_row, parent, false),
+            clickListener
+        ) { position ->
             deleteItem(position)
         }
-        return viewHolder
     }
 
     fun deleteItem(position: Int) {
